@@ -1,0 +1,152 @@
+from collections import Counter
+class Solution:
+    def carFleet(self, target: int, pos: List[int], sp: List[int]) -> int:
+        li=[[p,s] for p,s in zip(pos,sp)] 
+        li=sorted(li)[::-1]
+        stack=[]
+        for p,s in li:
+            stack.append((target-p)/s)
+            if len(stack)>=2 and stack[-1]<=stack[-2]:
+                stack.pop()
+        return len(stack)
+---------------------------------------------------------------------------------------------------------------
+class Solution:
+    def nextGreaterElement(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        l=[]
+        i=0
+        le=len(nums1)
+        while(i<le):
+            j=0
+            f=0
+            while(nums1[i]!=nums2[j]):
+                j+=1
+            length=len(nums2)
+            print(nums2[j])
+            while(j<length):
+                if(nums2[j]>nums1[i]):
+                    l.append(nums2[j])
+                    f=1
+                    break
+                else:
+                    j+=1
+            if(f==0):
+                l.append(-1)
+            i+=1
+        print(l)
+        return l
+-----------------------------------------------------------------------------------------------------------------
+class MyStack:
+
+    def __init__(self):
+        self.l=[]        
+
+    def push(self, x: int) -> None:
+        self.l.append(x)
+
+    def pop(self) -> int:
+        le=len(self.l)
+        c=0
+        while(c<le-1):
+            p= self.l.pop(0)
+            self.l.append(p)
+            c+=1
+        p1 = self.l.pop(0)
+        return p1
+    def top(self) -> int:
+        t=self.l[-1]
+        print(t)
+        return t
+
+    def empty(self) -> bool:
+        if self.l:
+            return False
+        else:
+            return True
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+class Solution:
+    def isValid(self, s: str) -> bool:
+        stack=[]
+        d={")":"(","]":"[","}":"{"}
+        for c in s:
+            if c in d:
+                if stack and stack[-1]==d[c]:
+                    stack.pop()
+                else:
+                    return False
+            else:
+                stack.append(c)
+        return True if not stack else False                        
+----------------------------------------------------------------------------------------------------------------------------------
+class Solution:
+    def calculate(self, s: str) -> int:
+        le=len(s)
+        currnum,output,sign,stack=0,0,1,[]
+        for i in range(le):
+            c=s[i]
+            if c.isdigit():
+                currnum=(currnum*10)+int(c)
+            if c in "+-":
+                output+=(currnum*sign)
+                currnum=0
+                if c=='+':
+                    sign=1
+                else:
+                    sign=-1
+            if c=='(':
+                output+=(currnum*sign)
+                stack.append(output)
+                stack.append(sign)
+                output=0
+                sign=1
+            if c==')':
+                output+=(currnum*sign)
+                output*=stack.pop()
+                output+=stack.pop()
+                currnum=0
+        print(stack)
+        print(output)
+        return output+(currnum*sign)
+
+---------------------------------------------------------------------------------------------------------------------------------------
+#include<stack>
+class Solution {
+public:
+    int calculate(string s) {
+        int len=s.length();
+        long currnum=0;
+        char ope='+';
+        stack<int> stack;
+        int sum=0;
+        for(int i=0;i<len;i++){
+            char currchar = s[i];
+            if(isdigit(currchar)){
+                currnum=(currnum*10)+currchar-'0';
+            }
+            if(!isdigit(currchar) && !iswspace(currchar)||i==len-1){
+                if(ope=='+'){stack.push(currnum);}
+                if(ope=='-'){stack.push(-currnum);}
+                if(ope=='*'){
+                    int stacktop = stack.top();
+                    stack.pop();
+                    stack.push(stacktop*currnum);
+                }
+                if(ope=='/'){
+                    int stacktop = stack.top();
+                    stack.pop();
+                    stack.push(stacktop/currnum);
+                }
+                currnum=0;
+                ope=currchar;
+            }
+        }
+        while(stack.size()!=0){
+            sum+=stack.top();
+            stack.pop();
+        }
+        cout<<sum;
+        return sum;
+    }
+};
+------------------------------------------------------------------------------------------------------------------------------------------------
