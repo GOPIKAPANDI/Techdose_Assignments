@@ -15,7 +15,7 @@ class Solution:
             return left
         else:
             return right
-
+--------------------------------------------------------------------------------------------------------------------
 2.Binary-tree-level-order-traversal
 from collections import deque
 class Solution:
@@ -35,3 +35,94 @@ class Solution:
                     q.append(node.right) 
             ans.append(lis) 
         return ans
+---------------------------------------------------------------------------------------------------------------------
+class Solution:
+    def maxPathSum(self, root: Optional[TreeNode]) -> int: 
+        ma = -inf 
+        def getmaxpath(root):
+            nonlocal ma 
+            if not root: return 0 
+            gain_left = max(0,getmaxpath(root.left)) 
+            gain_right = max(0,getmaxpath(root.right))  
+            curmaxpath = root.val + gain_left + gain_right  
+            ma = max(ma , curmaxpath) 
+            return root.val + max(gain_left,gain_right) 
+        getmaxpath(root)
+        return ma
+-----------------------------------------------------------------------------------------------------------------------
+from collections import deque
+class Solution:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        if not root: return []
+        lis=[]
+        q=deque([root]) 
+        while q:
+            l=[] 
+            le=len(q) 
+            for i in range(le): 
+                node=q.popleft() 
+                l.append(node.val)
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right) 
+            lis.append(l[-1])  
+        return lis
+
+-----------------------------------------------------------------------------------------------------------------------
+class Solution:
+    def goodNodes(self, root: TreeNode) -> int:
+        res=0
+        lis=[root.val] 
+        def dfs(root):
+            nonlocal res
+            if not root:
+                return 
+            if root.val>=max(lis):
+                res+=1 
+            lis.append(root.val) 
+            dfs(root.left)
+            dfs(root.right) 
+            lis.pop()             
+        dfs(root) 
+        return res     
+------------------------------------------------------------------------------------------------------------------------
+class Solution:
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        ans=0
+        def depth(root):
+            nonlocal ans
+            if not root: return 0 
+            l=depth(root.left)
+            r=depth(root.right) 
+            ans = max(ans,l+r) 
+            return 1+max(l,r)  
+        depth(root) 
+        return ans
+-------------------------------------------------------------------------------------------------------------------------
+from collections import deque
+class Solution:
+    def zigzagLevelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        if not root: return []
+        q=deque([root]) 
+        res=[]
+        ures=[]
+        f=0
+        while q:
+            lis=[] 
+            le=len(q) 
+            for i in range(le):
+                node=q.popleft()
+                lis.append(node.val)  
+                if node.left:
+                    q.append(node.left) 
+                if node.right:
+                    q.append(node.right)   
+            res.append(lis)
+        print(res)
+        le1=len(res)
+        for i in range(le1):
+            if i%2!=0:
+                res[i]=res[i][::-1]   
+        return res
+-----------------------------------------------------------------------------------------------------------------------
