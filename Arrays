@@ -1,0 +1,251 @@
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+        res=set()
+        le=len(nums) 
+        for i in range(0,le-2): 
+            left,right=i+1,le-1 
+            su = nums[i] 
+            while(left<right): 
+                if su+nums[left]+nums[right]==0:
+                    res.add(tuple([su,nums[left],nums[right]]))  
+                if (su+nums[left]+nums[right])>0:
+                    right-=1
+                else:
+                    left+=1
+        return res
+-------------------------------------------------------------------------------------
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        buy=prices[0]
+        n=len(prices)
+        profit,maxprofit=0,0
+        for i in range(1,n):
+            if (prices[i]-buy)<1:
+                buy=prices[i]
+            else:
+                profit=prices[i]-buy
+                maxprofit=max(maxprofit,profit)
+        return maxprofit
+            
+----------------------------------------------------------------------------------------
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        profit=0 
+        for i in range(1,len(prices)):
+            profit+=max(0,prices[i]-prices[i-1]) 
+        return profit 
+-----------------------------------------------------------------------------------------
+class Solution:
+    def shipWithinDays(self, weights: List[int], days: int) -> int:
+        l,r=max(weights),sum(weights)
+        res=r
+        def canship(cap):
+            ships=1
+            cc=cap
+            for w in weights:
+                if cc-w<0:
+                    cc=cap
+                    ships+=1
+                cc-=w
+            return ships<=days
+        while(l<=r):
+            cap=(l+r)//2
+            if canship(cap):
+                r=cap-1
+                res=min(res,cap)
+            else:
+                l=cap+1 
+        return res
+--------------------------------------------------------------------------------------------
+class Solution:
+    def minAbsDifference(self, nums: List[int], goal: int) -> int:
+        n=len(nums)
+        mindiff=float("inf")
+        def dfs(i,val,arr,allset):
+            if i==len(arr):
+                allset.add(val)
+                return
+            dfs(i+1,val,arr,allset)
+            dfs(i+1,val+arr[i],arr,allset)
+        fh=nums[:n//2]
+        sh=nums[n//2:]
+        s1=set()
+        s2=set()
+        dfs(0,0,fh,s1)
+        dfs(0,0,sh,s2)
+        # print(s1,s2)
+        s2=sorted(s2)
+        ls2=len(s2)
+        for x in s1:
+            y= goal - x
+            ind = bisect_left(s2,y)
+            # if ind>0:
+            #     mindiff=min(mindiff,abs(y - s2[ind-1]))
+            if ind<ls2:
+                mindiff=min(mindiff,abs(y - s2[ind]))
+                if ind+1<n:
+                    mindiff=min(mindiff,abs(y - s2[ind+1]))
+                if ind-1>=0:
+                    mindiff=min(mindiff,abs(y - s2[ind-1]))
+            elif ind>=ls2:
+                mindiff=min(mindiff,abs(y - s2[ind-1]))
+        return mindiff 
+-------------------------------------------------------------------------------------------
+from sortedcontainers import SortedList
+class Solution:
+    def countSmaller(self, nums: List[int]) -> List[int]:
+        res,sl=deque(),SortedList()
+        for i in nums[::-1]:
+            res.appendleft(sl.bisect_left(i))
+            sl.add(i)
+        return res
+------------------------------------------------------------------------------------------
+class Solution:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        nums.sort(reverse=True)
+        return nums[k-1]
+------------------------------------------------------------------------------------------
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        maxi=float('-inf')
+        su=0
+        start,end,n=-1,-1,len(nums)
+        for i in range(0,n):
+            if su==0:
+                start=i
+            su+=nums[i]
+            if su>maxi:
+                maxi=su
+                end=i
+            if(su<0):
+                su=0
+        print(nums[start:end+1])
+        return maxi 
+-------------------------------------------------------------------------------------------
+class Solution:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        intervals.sort()
+        l=len(intervals)
+        ans=[]
+        ans.append(intervals[0])
+        for i in range(1,l):
+            if intervals[i][0]<=ans[-1][1]:
+                ans[-1][1]=max(ans[-1][1],intervals[i][1])
+            else:
+                ans.append(intervals[i]) 
+        print(ans)
+        return ans
+--------------------------------------------------------------------------------------------
+class Solution:
+    def minSubArrayLen(self, t: int, nums: List[int]) -> int:
+        n=len(nums)
+        l,r=0,0
+        le=inf
+        s=0
+        while(r<n): 
+            s+=nums[r]
+            print(s)
+            while s>=t:
+                s-=nums[l]
+                l+=1   
+                curlen=r-l+2
+                le=min(le,curlen)       
+            r+=1
+        print(le)
+        return 0 if(le==inf) else le
+-----------------------------------------------------------------------------------------------
+class Solution:
+    def nextPermutation(self, nums: List[int]) -> None:
+        l=len(nums)
+        ind1,ind2=-1,-1
+        for i in range(l-1,0,-1):
+            if nums[i-1]>=nums[i]:
+                continue
+            else:
+                ind1=i-1
+                break
+        for j in range(l-1,ind1,-1):
+            if nums[j]>nums[ind1]:
+                ind2=j
+                break
+        print(ind1,ind2)
+        if ind1!=-1:
+            nums[ind2]=nums[ind2]+nums[ind1]
+            nums[ind1]=nums[ind2]-nums[ind1]
+            nums[ind2]=nums[ind2]-nums[ind1]
+            nums[ind1+1:]=nums[:ind1:-1]
+        else:
+            nums.sort()
+-------------------------------------------------------------------------------------------------
+class NumArray:
+
+    def __init__(self, nums: List[int]):
+        self.l=nums        
+
+    def sumRange(self, left: int, right: int) -> int:
+        return sum(self.l[left:right+1])
+-------------------------------------------------------------------------------------------------
+class Solution:
+    def search(self, nums: List[int], t: int) -> int:
+        l=len(nums)
+        for i in range(l):
+            if nums[i]==t:
+                return i
+        return -1
+--------------------------------------------------------------------------------------------------
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        n=len(nums)
+        l,r,i=0,n-1,0
+        def swap(ind1,ind2):
+            print(ind1,ind2)
+            t=nums[ind1]
+            nums[ind1]=nums[ind2]
+            nums[ind2]=t
+        while i<=r:
+            if nums[i]==0:
+                swap(l,i)
+                l+=1
+            elif nums[i]==2:
+                swap(i,r)
+                r-=1
+                i-=1
+            i+=1
+
+
+-----------------------------------------------------------------------------------------------
+class Solution:
+    def trap(self, h: List[int]) -> int:
+        le=len(h)
+        lm,rm=h[0],h[le-1] 
+        su=0
+        lmax=[0]*le
+        rmax=[0]*le
+        for i in range(1,le):
+            lmax[i]=lm
+            lm=max(lm,h[i])
+        for j in range(le-2,-1,-1):
+            rmax[j]=rm
+            rm=max(rm,h[j])
+        for a in range(le):
+            small = min(lmax[a],rmax[a]) 
+            small = small - h[a] 
+            if small>0:
+                su+=small
+        return su
+-----------------------------------------------------------------------------------------------
+from collections import defaultdict
+class Solution:
+    def twoSum(self, nums: List[int], t: int) -> List[int]:
+        def def_val(): return -1
+        h=defaultdict(def_val)
+        n=len(nums)
+        li=[]
+        for i in range(n):
+            if h[t-nums[i]]!=-1:
+                li.extend([h[t-nums[i]],i]) 
+                break
+            h[nums[i]]=i
+        return li
+-------------------------------------------------------------------------------------------------
