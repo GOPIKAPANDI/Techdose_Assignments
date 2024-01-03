@@ -1,0 +1,82 @@
+class SegmentTree:
+    def __init__(self, v):
+        self.n = len(v)
+        self.seg = [0] * (4 * self.n)
+        self.build(0, 0, self.n - 1, v)
+
+    def build(self, in_, low, high, v):
+        if low == high:
+            self.seg[in_] = int(v[low] == 0)
+            return
+
+        mid = low + (high - low) // 2
+        self.build(2 * in_ + 1, low, mid, v)
+        self.build(2 * in_ + 2, mid + 1, high, v)
+        self.seg[in_] = self.seg[2 * in_ + 1] + self.seg[2 * in_ + 2]
+
+    def query(self, in_, low, high, l, r):
+        if l > high or r < low:
+            return 0
+        if low >= l and high <= r:
+            return self.seg[in_]
+
+        mid = low + (high - low) // 2
+        left = self.query(2 * in_ + 1, low, mid, l, r)
+        right = self.query(2 * in_ + 2, mid + 1, high, l, r)
+        return left + right
+
+def solve():
+    v = [3, 0, 5, 0, 1, 0, 0, 0, 6, 1]
+    segment_tree = SegmentTree(v)
+    print("No of zeroes from index 3 to 7 is", segment_tree.query(0, 0, 9, 3, 7))
+
+
+solve()
+-------------------------------------------------------------------------------------------------------------------
+class SegmentTree:
+    def __init__(self, v):
+        self.n = len(v)
+        self.seg = [0] * (4 * self.n)
+        self.build(0, 0, self.n - 1, v)
+
+    def build(self, in_, low, high, v):
+        if low == high:
+            self.seg[in_] = int(v[low] == 0)
+            return
+
+        mid = low + (high - low) // 2
+        self.build(2 * in_ + 1, low, mid, v)
+        self.build(2 * in_ + 2, mid + 1, high, v)
+        self.seg[in_] = self.seg[2 * in_ + 1] + self.seg[2 * in_ + 2]
+
+    def query(self, in_, low, high, l, r):
+        if l > high or r < low:
+            return 0
+        if low >= l and high <= r:
+            return self.seg[in_]
+
+        mid = low + (high - low) // 2
+        left = self.query(2 * in_ + 1, low, mid, l, r)
+        right = self.query(2 * in_ + 2, mid + 1, high, l, r)
+        return left + right
+
+    def kth_zero(self, in_, low, high, k):
+        if k > self.seg[in_]:
+            return -1
+        if low == high:
+            return low
+
+        mid = low + (high - low) // 2
+        if self.seg[2 * in_ + 1] >= k:
+            return self.kth_zero(2 * in_ + 1, low, mid, k)
+        else:
+            return self.kth_zero(2 * in_ + 2, mid + 1, high, k - self.seg[2 * in_ + 1])
+
+def solve():
+    v = [3, 0, 5, 0, 1, 0, 0, 0, 6, 1]
+    segment_tree = SegmentTree(v)
+    print("The 4th zero in the array is at the index", segment_tree.kth_zero(0, 0, 9, 4))
+
+solve()
+-------------------------------------------------------------------------------------------------------------------
+
