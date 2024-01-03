@@ -1,0 +1,77 @@
+from heapq import heappush,heappop
+class Solution:
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        h=[]
+        for i,l in enumerate(lists):
+            if l: heappush(h,(l.val,i))
+        dummy = curr = ListNode(0)
+        while h:
+            val,i=heappop(h)
+            curr.next=ListNode(val)
+            curr=curr.next
+            if lists[i].next:
+                heappush(h,(lists[i].next.val,i))
+                lists[i]=lists[i].next
+        return dummy.next
+   
+------------------------------------------------------------------------------------------------------------------
+from collections import deque
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        ans=[]
+        q=deque()
+        l=r=0
+        le=len(nums)
+        while(r<le):
+            while q and nums[r]>nums[q[-1]]:
+                q.pop()
+            q.append(r)
+            if (r+1)>=k:
+                ans.append(nums[q[0]])
+                l+=1
+            if q[0]<l:
+                q.popleft()
+            r+=1
+        return ans
+        
+-------------------------------------------------------------------------------------------------------------------
+from sortedcontainers import SortedList
+class MedianFinder:
+    def __init__(self):
+        self.nums=SortedList()
+
+    def addNum(self, num: int) -> None:
+        self.nums.add(num)
+
+    def findMedian(self) -> float:
+        l=len(self.nums)
+        if l%2!=0:
+            return float(self.nums[l//2])
+        elif l%2==0:
+            return float((self.nums[l//2]+self.nums[(l//2)-1])/2.0)
+        
+
+--------------------------------------------------------------------------------------------------------------------
+from collections import Counter
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        c=Counter(nums)
+        l=[]
+        cl=c.most_common()
+        print(cl)
+        for i in range(k):
+            print(type(i))
+            l.append(cl[i][0])
+        return l
+---------------------------------------------------------------------------------------------------------------------
+import bisect
+class KthLargest:
+
+    def __init__(self, k: int, nums: List[int]):
+        self.li=sorted(nums)
+        self.k=k     
+
+    def add(self, val: int) -> int:
+        bisect.insort(self.li,val)
+        return self.li[-(self.k)]
+----------------------------------------------------------------------------------------------------------------------
