@@ -1,0 +1,80 @@
+
+
+int singleNumber(int* nums, int numsSize){
+    int f,n;
+  for(int i=0;i<numsSize;i++)
+  {
+      f=0;
+      for(int j=0;j<numsSize;j++)
+      {
+          if(i!=j && nums[i]==nums[j])
+          {
+              f=1;
+              break;
+          }
+      }
+      if(f==0)
+           n=nums[i];
+  }
+    return n;
+}
+---------------------------------------------------------------------------------------------------
+https://leetcode.com/problems/single-number-ii/submissions/928396814/
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        for i in nums:
+            if nums.count(i)>1:
+                continue
+            else:
+                ans=i
+                break
+        return ans
+---------------------------------------------------------------------------------------------------
+https://leetcode.com/problems/majority-element/submissions/907130701/
+from collections import Counter
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        c=Counter(nums)
+        l=len(nums)
+        cnt=l//2
+        print(c)
+        for i in nums:
+            if c[i]>cnt:
+                ans=i
+                print(ans)
+                print(c[i])
+                break
+        return ans
+----------------------------------------------------------------------------------------------------
+https://leetcode.com/problems/bitwise-and-of-numbers-range/submissions/928407865/
+class Solution:
+    def rangeBitwiseAnd(self, left: int, right: int) -> int:
+        #m=right-1
+        n=right
+        while(n>left):
+            n=n&n-1
+        return n
+-----------------------------------------------------------------------------------------------------
+https://leetcode.com/problems/counting-bits/submissions/872465797/
+class Solution:
+    def countBits(self, n: int) -> List[int]:
+        l=[]
+        for i in range(0,n+1):
+            l.append(bin(i).count('1'))
+        return l    
+-----------------------------------------------------------------------------------------------------
+https://leetcode.com/problems/hamming-distance/submissions/931275688/
+int hammingDistance(int x, int y){
+int cnt=0;
+while(x>0 || y>0){
+    printf("%d %d\n",x%2,y%2);
+    if ((x%2)!=(y%2))
+        cnt+=1;
+    x=x/2;
+    y=y/2;
+    printf("%d %d\n",x,y);
+}
+printf("%d ",cnt);
+return cnt;
+}
+-------------------------------------------------------------------------------------------------------
